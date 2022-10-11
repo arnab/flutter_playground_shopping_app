@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'models/providers/products_provider.dart';
 import 'widgets/screens/product_detail_screen.dart';
 import 'widgets/screens/products_overview_screen.dart';
 
@@ -18,25 +20,28 @@ class ShopApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: appTitle,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: primaryColor,
-          ).copyWith(
-            secondary: secondaryColor,
+    return ChangeNotifierProvider(
+      create: (ctx) => ProductsProvider(),
+      child: MaterialApp(
+          title: appTitle,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: primaryColor,
+            ).copyWith(
+              secondary: secondaryColor,
+            ),
+            fontFamily: 'Lato',
+            switchTheme: SwitchThemeData(
+              thumbColor: MaterialStateProperty.all(secondaryColor),
+              trackColor: MaterialStateProperty.resolveWith((states) =>
+              states.contains(MaterialState.selected) ? primaryColorAccent : null),
+            ),
           ),
-          fontFamily: 'Lato',
-          switchTheme: SwitchThemeData(
-            thumbColor: MaterialStateProperty.all(secondaryColor),
-            trackColor: MaterialStateProperty.resolveWith((states) =>
-            states.contains(MaterialState.selected) ? primaryColorAccent : null),
-          ),
-        ),
-        home: ProductsOverviewScreen(),
-        routes: {
-          ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
-        }
+          home: ProductsOverviewScreen(),
+          routes: {
+            ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
+          }
+      ),
     );
   }
 }
