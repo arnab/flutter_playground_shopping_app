@@ -1,44 +1,42 @@
 import 'package:flutter/material.dart';
 
+import 'widgets/screens/product_detail_screen.dart';
+import 'widgets/screens/products_overview_screen.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(const ShopApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ShopApp extends StatelessWidget {
+  static const appTitle = 'Or9Shop';
+  static const primaryColor = Colors.purple;
+  static const primaryColorAccent = Colors.purpleAccent;
+  static const secondaryColor = Colors.deepOrange;
+
+
+  const ShopApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Shop!'),
-      ),
-      body: Center(
-        child: Text('Get Started'),
-      ),
+        title: appTitle,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: primaryColor,
+          ).copyWith(
+            secondary: secondaryColor,
+          ),
+          fontFamily: 'Lato',
+          switchTheme: SwitchThemeData(
+            thumbColor: MaterialStateProperty.all(secondaryColor),
+            trackColor: MaterialStateProperty.resolveWith((states) =>
+            states.contains(MaterialState.selected) ? primaryColorAccent : null),
+          ),
+        ),
+        home: ProductsOverviewScreen(),
+        routes: {
+          ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
+        }
     );
   }
 }
