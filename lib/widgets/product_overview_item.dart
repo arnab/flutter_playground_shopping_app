@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../models/product.dart';
 import 'screens/product_detail_screen.dart';
 
-class ProductItem extends StatelessWidget {
+class ProductOverviewItem extends StatelessWidget {
   final Product product;
 
-  const ProductItem(this.product, {Key? key}) : super(key: key);
+  const ProductOverviewItem(this.product, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

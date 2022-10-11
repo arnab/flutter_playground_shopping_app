@@ -3,7 +3,7 @@ import 'package:flutter_playground_shopping_app/main.dart';
 import 'package:flutter_playground_shopping_app/models/data/dummy_products.dart';
 
 import '../../models/product.dart';
-import '../product_item.dart';
+import '../product_overview_item.dart';
 
 class ProductsOverviewScreen extends StatelessWidget {
   final List<Product> loadedProducts = dummyProducts;
@@ -19,7 +19,7 @@ class ProductsOverviewScreen extends StatelessWidget {
       body: GridView.builder(
         padding: const EdgeInsets.all(10),
         itemCount: loadedProducts.length,
-        itemBuilder: (ctx, i) => ProductItem(loadedProducts[i]),
+        itemBuilder: (ctx, i) => ProductOverviewItem(loadedProducts[i]),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 3 / 2,
