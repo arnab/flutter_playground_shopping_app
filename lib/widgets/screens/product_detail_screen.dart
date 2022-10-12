@@ -10,7 +10,11 @@ class ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productId = ModalRoute.of(context)!.settings.arguments as String;
-    final product = Provider.of<ProductsProvider>(context).findById(productId);
+    final product = Provider.of<ProductsProvider>(
+      context,
+      // don't need to re-build widget if products collection is changed (e.g. new added, removed)
+      listen: false,
+    ).findById(productId);
 
     return Scaffold(
       appBar: AppBar(
