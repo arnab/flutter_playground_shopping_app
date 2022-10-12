@@ -26,5 +26,10 @@ class CartProvider with ChangeNotifier {
                 price: price,
               ));
     }
+    notifyListeners();
   }
+
+  int itemCount() => _itemsByProductId.values
+      .map((cartItem) => cartItem.quantity)
+      .fold(0, (a, b) => a + b);
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground_shopping_app/main.dart';
+import 'package:flutter_playground_shopping_app/models/providers/cart_provider.dart';
+import 'package:flutter_playground_shopping_app/widgets/badge.dart';
+import 'package:provider/provider.dart';
 
 import '../products_overview_grid.dart';
 
@@ -23,7 +26,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             icon: const Icon(Icons.more_vert),
             onSelected: (ViewMode val) {
               setState(() {
-                switch(val) {
+                switch (val) {
                   case ViewMode.favorites:
                     _showFavoritesOnly = true;
                     break;
@@ -43,7 +46,21 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                 child: Text('All'),
               ),
             ],
-          )
+          ),
+          Consumer<CartProvider>(
+            builder: (ctx, cartProvider, child) {
+              return Badge(
+                value: cartProvider.itemCount().toString(),
+                child: child!,
+              );
+            },
+            child: IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                // TODO
+              },
+            ),
+          ),
         ],
       ),
       body: ProductsOverviewGrid(_showFavoritesOnly),

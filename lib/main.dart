@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_playground_shopping_app/models/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'models/providers/products_provider.dart';
@@ -20,8 +21,11 @@ class ShopApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (ctx) => ProductsProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (ctx) => ProductsProvider()),
+        ChangeNotifierProvider(create: (ctx) => CartProvider()),
+      ],
       child: MaterialApp(
           title: appTitle,
           theme: ThemeData(
@@ -34,7 +38,9 @@ class ShopApp extends StatelessWidget {
             switchTheme: SwitchThemeData(
               thumbColor: MaterialStateProperty.all(secondaryColor),
               trackColor: MaterialStateProperty.resolveWith((states) =>
-              states.contains(MaterialState.selected) ? primaryColorAccent : null),
+              states.contains(MaterialState.selected)
+                  ? primaryColorAccent
+                  : null),
             ),
           ),
           home: const ProductsOverviewScreen(),
