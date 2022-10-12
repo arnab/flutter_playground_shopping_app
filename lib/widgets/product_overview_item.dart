@@ -32,7 +32,7 @@ class ProductOverviewItem extends StatelessWidget {
           ),
           trailing: IconButton(
             icon: Icon(
-              Icons.shopping_cart,
+              Icons.shopping_cart_outlined,
               color: Theme.of(context).colorScheme.primary,
             ),
             onPressed: () {
