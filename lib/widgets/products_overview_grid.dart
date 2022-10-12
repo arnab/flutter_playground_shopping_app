@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'product_overview_item.dart';
 
 class ProductsOverviewGrid extends StatelessWidget {
-
   const ProductsOverviewGrid({super.key});
 
   @override
@@ -15,7 +14,10 @@ class ProductsOverviewGrid extends StatelessWidget {
     return GridView.builder(
       padding: const EdgeInsets.all(10),
       itemCount: products.length,
-      itemBuilder: (ctx, i) => ProductOverviewItem(products[i]),
+      itemBuilder: (ctx, i) => ChangeNotifierProvider(
+        create: (ctx) => products[i],
+        child: const ProductOverviewItem(),
+      ),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 3 / 2,

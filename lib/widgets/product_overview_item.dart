@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/product.dart';
 import 'screens/product_detail_screen.dart';
 
 class ProductOverviewItem extends StatelessWidget {
-  final Product product;
-
-  const ProductOverviewItem(this.product, {Key? key}) : super(key: key);
+  const ProductOverviewItem({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final product = Provider.of<Product>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
         footer: GridTileBar(
           backgroundColor: Colors.black87,
           leading: IconButton(
-            icon: const Icon(Icons.favorite),
+            icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
             color: Theme.of(context).colorScheme.primary,
-            onPressed: () {
-              // TODO
-            },
+            onPressed: () => product.toggleFavoriteStatus(),
           ),
           title: Text(
             product.title,
