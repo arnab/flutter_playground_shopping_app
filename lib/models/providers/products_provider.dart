@@ -8,6 +8,9 @@ class ProductsProvider with ChangeNotifier {
 
   List<Product> get products => [..._products];
 
+  List<Product> get favoriteProducts =>
+      _products.where((p) => p.isFavorite).toList();
+
   void addProduct() {
     // _products.add(value);
     notifyListeners();
@@ -16,5 +19,4 @@ class ProductsProvider with ChangeNotifier {
   Product findById(id) {
     return _products.firstWhere((p) => p.id == id);
   }
-
 }

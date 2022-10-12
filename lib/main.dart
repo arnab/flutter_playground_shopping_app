@@ -37,7 +37,7 @@ class ShopApp extends StatelessWidget {
               states.contains(MaterialState.selected) ? primaryColorAccent : null),
             ),
           ),
-          home: ProductsOverviewScreen(),
+          home: const ProductsOverviewScreen(),
           routes: {
             ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
           }
