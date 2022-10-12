@@ -13,4 +13,8 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Product findById(id) {
+    return _products.firstWhere((p) => p.id == id);
+  }
+
 }
