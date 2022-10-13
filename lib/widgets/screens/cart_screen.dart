@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_playground_shopping_app/models/providers/cart_provider.dart';
+import 'package:flutter_playground_shopping_app/widgets/cart_list_item.dart';
 import 'package:money2/money2.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/providers/cart_provider.dart';
+import '../../widgets/cart_list_item.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -44,14 +47,22 @@ class CartScreen extends StatelessWidget {
                   TextButton(
                     onPressed: () {},
                     style: TextButton.styleFrom(
-                      foregroundColor: Theme.of(context).colorScheme.primary
-                    ),
+                        foregroundColor: Theme.of(context).colorScheme.primary),
                     child: const Text('Checkout'),
                   ),
                 ],
               ),
             ),
-          )
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: ListView.builder(
+                itemBuilder: (_, i) =>
+                    CartListItem(cartProvider.itemsByProductId.values.toList()[i]),
+                itemCount: cartProvider.uniqueProductCount),
+          ),
         ],
       ),
     );
