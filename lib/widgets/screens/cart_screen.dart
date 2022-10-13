@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_playground_shopping_app/models/providers/orders_provider.dart';
 import 'package:money2/money2.dart';
 import 'package:provider/provider.dart';
 
@@ -44,7 +45,13 @@ class CartScreen extends StatelessWidget {
                     backgroundColor: Theme.of(context).colorScheme.primary,
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<OrdersProvider>(context, listen: false).addOrder(
+                        cartProvider.itemsByProductId.values.toList(),
+                        cartProvider.totalAmount,
+                      );
+                      cartProvider.clear();
+                    },
                     style: TextButton.styleFrom(
                         foregroundColor: Theme.of(context).colorScheme.primary),
                     child: const Text('Checkout'),
@@ -59,8 +66,7 @@ class CartScreen extends StatelessWidget {
           Expanded(
             child: ListView.builder(
                 itemBuilder: (_, i) => CartListItem(
-                      productId:
-                          cartProvider.itemsByProductId.keys.toList()[i],
+                      productId: cartProvider.itemsByProductId.keys.toList()[i],
                       item: cartProvider.itemsByProductId.values.toList()[i],
                     ),
                 itemCount: cartProvider.uniqueProductCount),

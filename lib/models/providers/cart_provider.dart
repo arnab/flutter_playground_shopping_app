@@ -35,6 +35,11 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clear() {
+    _itemsByProductId.clear();
+    notifyListeners();
+  }
+
   int get itemCount => _itemsByProductId.values
       .map((cartItem) => cartItem.quantity)
       .fold(0, (a, b) => a + b);
@@ -44,5 +49,6 @@ class CartProvider with ChangeNotifier {
   double get totalAmount => _itemsByProductId.values
       .map((cartItem) => cartItem.price * cartItem.quantity)
       .fold(0.0, (a, b) => a + b);
+
 }
 
