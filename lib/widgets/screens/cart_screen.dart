@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_playground_shopping_app/widgets/cart_list_item.dart';
 import 'package:money2/money2.dart';
 import 'package:provider/provider.dart';
 
@@ -59,8 +58,11 @@ class CartScreen extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-                itemBuilder: (_, i) =>
-                    CartListItem(cartProvider.itemsByProductId.values.toList()[i]),
+                itemBuilder: (_, i) => CartListItem(
+                      productId:
+                          cartProvider.itemsByProductId.keys.toList()[i],
+                      item: cartProvider.itemsByProductId.values.toList()[i],
+                    ),
                 itemCount: cartProvider.uniqueProductCount),
           ),
         ],
