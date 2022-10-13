@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground_shopping_app/models/providers/orders_provider.dart';
 import 'package:flutter_playground_shopping_app/widgets/screens/orders_screen.dart';
+import 'package:flutter_playground_shopping_app/widgets/screens/manage_products_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'models/providers/cart_provider.dart';
@@ -18,7 +19,6 @@ class ShopApp extends StatelessWidget {
   static const primaryColor = Colors.purple;
   static const primaryColorAccent = Colors.purpleAccent;
   static const secondaryColor = Colors.deepOrange;
-
 
   const ShopApp({super.key});
 
@@ -42,9 +42,9 @@ class ShopApp extends StatelessWidget {
             switchTheme: SwitchThemeData(
               thumbColor: MaterialStateProperty.all(secondaryColor),
               trackColor: MaterialStateProperty.resolveWith((states) =>
-              states.contains(MaterialState.selected)
-                  ? primaryColorAccent
-                  : null),
+                  states.contains(MaterialState.selected)
+                      ? primaryColorAccent
+                      : null),
             ),
           ),
           home: const ProductsOverviewScreen(),
@@ -52,8 +52,9 @@ class ShopApp extends StatelessWidget {
             ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
             CartScreen.routeName: (ctx) => const CartScreen(),
             OrdersScreen.routeName: (ctx) => const OrdersScreen(),
-          }
-      ),
+            ManageProductsScreen.routeName: (ctx) =>
+                const ManageProductsScreen(),
+          }),
     );
   }
 }
