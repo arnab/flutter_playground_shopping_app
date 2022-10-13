@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground_shopping_app/models/providers/orders_provider.dart';
+import 'package:flutter_playground_shopping_app/widgets/screens/orders_screen.dart';
 import 'package:money2/money2.dart';
 import 'package:provider/provider.dart';
 
@@ -51,6 +52,7 @@ class CartScreen extends StatelessWidget {
                         cartProvider.totalAmount,
                       );
                       cartProvider.clear();
+                      Navigator.of(context).pushNamed(OrdersScreen.routeName);
                     },
                     style: TextButton.styleFrom(
                         foregroundColor: Theme.of(context).colorScheme.primary),
