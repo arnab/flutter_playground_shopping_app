@@ -9,8 +9,11 @@ class CartListItem extends StatelessWidget {
   final String productId;
   final CartItem item;
 
-  const CartListItem({required this.productId, required this.item, Key? key,})
-      : super(key: key);
+  const CartListItem({
+    required this.productId,
+    required this.item,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +24,28 @@ class CartListItem extends StatelessWidget {
     return Dismissible(
       key: ValueKey(item.id),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (_) {
+        return showDialog(
+          context: context,
+          builder: (ctx) {
+            return AlertDialog(
+              title: const Text('Are you sure?'),
+              content: Text(
+                  'Do you want to remove ${item.title} (${item.quantity}x)?'),
+              actions: [
+                TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: const Text('No')),
+                TextButton(onPressed: () => Navigator.of(ctx).pop(true), child: const Text('Yes')),
+              ],
+            );
+          },
+        );
+        return Future.value(true);
+      },
       onDismissed: (_) {
         Provider.of<CartProvider>(context, listen: false).removeItem(productId);
       },
       background: Container(
-        color: Theme
-            .of(context)
-            .colorScheme
-            .error,
+        color: Theme.of(context).colorScheme.error,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         margin: itemMargin,
@@ -44,10 +61,7 @@ class CartListItem extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: Theme
-                  .of(context)
-                  .colorScheme
-                  .primary,
+              backgroundColor: Theme.of(context).colorScheme.primary,
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: FittedBox(
