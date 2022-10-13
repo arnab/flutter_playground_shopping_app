@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_playground_shopping_app/models/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../models/product.dart';
+import '../models/providers/cart_provider.dart';
 import 'screens/product_detail_screen.dart';
 
 class ProductOverviewItem extends StatelessWidget {

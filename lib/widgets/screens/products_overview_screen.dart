@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_playground_shopping_app/main.dart';
-import 'package:flutter_playground_shopping_app/models/providers/cart_provider.dart';
-import 'package:flutter_playground_shopping_app/widgets/badge.dart';
-import 'package:flutter_playground_shopping_app/widgets/screens/cart_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../main.dart';
+import '../../models/providers/cart_provider.dart';
+import '../badge.dart';
 import '../products_overview_grid.dart';
+import 'cart_screen.dart';
 
 class ProductsOverviewScreen extends StatefulWidget {
   const ProductsOverviewScreen({super.key});

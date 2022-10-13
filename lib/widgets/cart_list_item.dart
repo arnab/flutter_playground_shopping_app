@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_playground_shopping_app/models/cart_item.dart';
-import 'package:flutter_playground_shopping_app/models/providers/cart_provider.dart';
 import 'package:money2/money2.dart';
 import 'package:provider/provider.dart';
+
+import '../models/cart_item.dart';
+import '../models/providers/cart_provider.dart';
 
 class CartListItem extends StatelessWidget {
   final String productId;

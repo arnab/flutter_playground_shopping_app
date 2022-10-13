@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_playground_shopping_app/models/data/dummy_products.dart';
 
+import '../data/dummy_products.dart';
 import '../product.dart';
 
 class ProductsProvider with ChangeNotifier {
