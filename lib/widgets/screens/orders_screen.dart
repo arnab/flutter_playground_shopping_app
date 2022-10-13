@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground_shopping_app/models/providers/orders_provider.dart';
+import 'package:flutter_playground_shopping_app/widgets/app_drawer.dart';
 import 'package:flutter_playground_shopping_app/widgets/order_item.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,7 @@ class OrdersScreen extends StatelessWidget {
         itemBuilder: (ctx, i) => OrderItem(ordersProvider.orders[i]),
         itemCount: ordersProvider.orders.length,
       ),
+      drawer: const AppDrawer(),
     );
   }
 }

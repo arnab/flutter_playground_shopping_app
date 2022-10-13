@@ -14,7 +14,7 @@ void main() {
 }
 
 class ShopApp extends StatelessWidget {
-  static const appTitle = 'Or9Shop';
+  static const appTitle = 'FlutterProShop';
   static const primaryColor = Colors.purple;
   static const primaryColorAccent = Colors.purpleAccent;
   static const secondaryColor = Colors.deepOrange;

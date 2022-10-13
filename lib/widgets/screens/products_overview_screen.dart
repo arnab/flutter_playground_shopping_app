@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_playground_shopping_app/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
@@ -64,6 +65,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ),
         ],
       ),
+      drawer: const AppDrawer(),
       body: ProductsOverviewGrid(_showFavoritesOnly),
     );
   }
