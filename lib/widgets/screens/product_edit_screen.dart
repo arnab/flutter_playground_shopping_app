@@ -53,6 +53,12 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) =>
                       FocusScope.of(context).requestFocus(_priceNodeFocus),
+                  validator: (value) {
+                    if((value ?? '').isEmpty) {
+                      return 'Please enter the title';
+                    }
+                    return null;
+                  },
                   onSaved: (val) {
                     _editedProduct = _editedProduct.copyWith(title: val);
                   },
@@ -65,6 +71,15 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                   focusNode: _priceNodeFocus,
                   onFieldSubmitted: (_) => FocusScope.of(context)
                       .requestFocus(_descriptionNodeFocus),
+                  validator: (value) {
+                    if((value ?? '').isEmpty) {
+                      return 'Please enter the price';
+                    }
+                    if(double.tryParse(value!) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
                   onSaved: (val) {
                     if (val != null) {
                       _editedProduct =
@@ -107,6 +122,13 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                         controller: _imageUrlController,
                         focusNode: _imageUrlNodeFocus,
                         onFieldSubmitted: (_) => _saveForm(),
+                        validator: (value) {
+                          if((value ?? '').isEmpty) {
+                            return 'Please enter an image URL';
+                          }
+                          // TODO: Regex validation
+                          return null;
+                        },
                         onSaved: (val) {
                           _editedProduct =
                               _editedProduct.copyWith(imageUrl: val);
@@ -142,11 +164,12 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   }
 
   void _saveForm() {
+    final bool? isValid = _form.currentState?.validate();
+    if (!(isValid ?? false)) {
+      return;
+    }
+
     _form.currentState?.save();
-    print(_editedProduct.title);
-    print(_editedProduct.price);
-    print(_editedProduct.description);
-    print(_editedProduct.imageUrl);
     // TODO: Validate and save data
   }
 }
