@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_playground_shopping_app/models/product.dart';
+import 'package:flutter_playground_shopping_app/models/providers/products_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProductEditScreen extends StatefulWidget {
   const ProductEditScreen({Key? key}) : super(key: key);
@@ -54,7 +56,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                   onFieldSubmitted: (_) =>
                       FocusScope.of(context).requestFocus(_priceNodeFocus),
                   validator: (value) {
-                    if((value ?? '').isEmpty) {
+                    if ((value ?? '').isEmpty) {
                       return 'Please enter the title';
                     }
                     return null;
@@ -72,10 +74,10 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                   onFieldSubmitted: (_) => FocusScope.of(context)
                       .requestFocus(_descriptionNodeFocus),
                   validator: (value) {
-                    if((value ?? '').isEmpty) {
+                    if ((value ?? '').isEmpty) {
                       return 'Please enter the price';
                     }
-                    if(double.tryParse(value!) == null) {
+                    if (double.tryParse(value!) == null) {
                       return 'Please enter a valid number';
                     }
                     return null;
@@ -123,7 +125,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                         focusNode: _imageUrlNodeFocus,
                         onFieldSubmitted: (_) => _saveForm(),
                         validator: (value) {
-                          if((value ?? '').isEmpty) {
+                          if ((value ?? '').isEmpty) {
                             return 'Please enter an image URL';
                           }
                           // TODO: Regex validation
@@ -168,8 +170,9 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     if (!(isValid ?? false)) {
       return;
     }
-
     _form.currentState?.save();
-    // TODO: Validate and save data
+    Provider.of<ProductsProvider>(context, listen: false)
+        .addProduct(_editedProduct);
+    Navigator.of(context).pop();
   }
 }
