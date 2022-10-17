@@ -12,6 +12,15 @@ class ProductEditScreen extends StatefulWidget {
 class _ProductEditScreenState extends State<ProductEditScreen> {
   final _priceNodeFocus = FocusNode();
   final _descriptionNodeFocus = FocusNode();
+  final _imageUrlNodeFocus = FocusNode();
+  final _imageUrlController = TextEditingController();
+
+
+  @override
+  void initState() {
+    _imageUrlNodeFocus.addListener(_updateImageFromUrl);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +43,11 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                 TextFormField(
                   decoration: const InputDecoration(label: Text('Price')),
                   textInputAction: TextInputAction.next,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   focusNode: _priceNodeFocus,
-                  onFieldSubmitted: (_) =>
-                      FocusScope.of(context).requestFocus(_descriptionNodeFocus),
+                  onFieldSubmitted: (_) => FocusScope.of(context)
+                      .requestFocus(_descriptionNodeFocus),
                 ),
                 TextFormField(
                   decoration: const InputDecoration(label: Text('Description')),
@@ -45,6 +55,35 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                   keyboardType: TextInputType.multiline,
                   focusNode: _descriptionNodeFocus,
                 ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      margin: const EdgeInsets.only(top: 8, right: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey, width: 1),
+                      ),
+                      child: _imageUrlController.text.isEmpty
+                          ? const Text('Enter a URL')
+                          : FittedBox(
+                              fit: BoxFit.cover,
+                              child: Image.network(_imageUrlController.text),
+                            ),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        decoration:
+                            const InputDecoration(label: Text('Image URL')),
+                        keyboardType: TextInputType.url,
+                        textInputAction: TextInputAction.done,
+                        controller: _imageUrlController,
+                        focusNode: _imageUrlNodeFocus,
+                      ),
+                    )
+                  ],
+                )
               ],
             ),
           ),
@@ -57,6 +96,17 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   void dispose() {
     _priceNodeFocus.dispose();
     _descriptionNodeFocus.dispose();
+
+    _imageUrlNodeFocus.removeListener(_updateImageFromUrl);
+    _imageUrlNodeFocus.dispose();
+    _imageUrlController.dispose();
+
     super.dispose();
+  }
+
+  void _updateImageFromUrl() {
+    setState(() {
+      // Nothing to do, just need the widget to refresh
+    });
   }
 }
