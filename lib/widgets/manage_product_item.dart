@@ -20,7 +20,10 @@ class ManageProductItem extends StatelessWidget {
           children: [
             IconButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(ProductEditScreen.routeName);
+                Navigator.of(context).pushNamed(
+                  ProductEditScreen.routeName,
+                  arguments: product.id,
+                );
               },
               icon: const Icon(Icons.edit),
               color: Theme.of(context).colorScheme.primary,

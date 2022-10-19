@@ -85,7 +85,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ],
       ),
       drawer: const AppDrawer(),
-      body: ProductsOverviewGrid(_showFavoritesOnly),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator(),)
+          : ProductsOverviewGrid(_showFavoritesOnly),
     );
   }
 }
