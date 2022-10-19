@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_playground_shopping_app/models/http_exception.dart';
 import 'package:flutter_playground_shopping_app/models/providers/products_provider.dart';
 import 'package:http/http.dart' as http;
 

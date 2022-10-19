@@ -19,12 +19,14 @@ class ProductOverviewItem extends StatelessWidget {
         footer: GridTileBar(
           backgroundColor: Colors.black87,
           leading: Consumer<Product>(
-            builder: (ctx, product, child) => IconButton(
-              icon: Icon(
-                  product.isFavorite ? Icons.favorite : Icons.favorite_border),
-              color: Theme.of(context).colorScheme.primary,
-              onPressed: () => product.toggleFavoriteStatus(),
-            ),
+            builder: (ctx, product, child) =>
+                IconButton(
+                  icon: Icon(
+                      product.isFavorite ? Icons.favorite : Icons
+                          .favorite_border),
+                  color: Theme.of(context).colorScheme.primary,
+                  onPressed: () => _toggleFavoriteStatus(product, context),
+                ),
           ),
           title: Text(
             product.title,
@@ -33,7 +35,10 @@ class ProductOverviewItem extends StatelessWidget {
           trailing: IconButton(
             icon: Icon(
               Icons.shopping_cart_outlined,
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme
+                  .of(context)
+                  .colorScheme
+                  .primary,
             ),
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -42,14 +47,16 @@ class ProductOverviewItem extends StatelessWidget {
                 content: Text('Added to cart: ${product.title}'),
                 duration: const Duration(seconds: 2),
                 action: SnackBarAction(
-                  label: 'UNDO',
-                  onPressed: () {
-                    cartProvider.removeSingleItem(product.id);
-                  }
-                ),
+                    label: 'UNDO',
+                    onPressed: () {
+                      cartProvider.removeSingleItem(product.id);
+                    }),
               ));
             },
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme
+                .of(context)
+                .colorScheme
+                .secondary,
           ),
         ),
         child: GestureDetector(
@@ -66,5 +73,21 @@ class ProductOverviewItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _toggleFavoriteStatus(Product product, BuildContext context) async {
+    try {
+      await product.toggleFavoriteStatus();
+    } catch (ex) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Could not favorite item: ${ex.toString()}'),
+        action: SnackBarAction(
+            label: 'DISMISS',
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            }),
+      ));
+    }
   }
 }
