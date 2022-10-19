@@ -11,14 +11,30 @@ class OrdersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ordersProvider = Provider.of<OrdersProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Orders'),
       ),
-      body: ListView.builder(
-        itemBuilder: (ctx, i) => OrderItem(ordersProvider.orders[i]),
-        itemCount: ordersProvider.orders.length,
+      body: FutureBuilder(
+        future: Provider.of<OrdersProvider>(context, listen: false)
+            .fetchAndSetOrders(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.error != null) {
+            // TODO: Better error handling with widgets
+            return Center(
+              child: Text('Could not load orders: ${snapshot.error.toString()}'),
+            );
+          }
+          return Consumer<OrdersProvider>(
+            builder: (context, ordersProvider, _) => ListView.builder(
+              itemBuilder: (ctx, i) => OrderItem(ordersProvider.orders[i]),
+              itemCount: ordersProvider.orders.length,
+            ),
+          );
+        },
       ),
       drawer: const AppDrawer(),
     );

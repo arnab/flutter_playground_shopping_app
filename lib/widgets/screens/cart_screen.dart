@@ -45,19 +45,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).colorScheme.primary,
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Provider.of<OrdersProvider>(context, listen: false).addOrder(
-                        cartProvider.itemsByProductId.values.toList(),
-                        cartProvider.totalAmount,
-                      );
-                      cartProvider.clear();
-                      Navigator.of(context).pushNamed(OrdersScreen.routeName);
-                    },
-                    style: TextButton.styleFrom(
-                        foregroundColor: Theme.of(context).colorScheme.primary),
-                    child: const Text('Checkout'),
-                  ),
+                  OrderButton(cartProvider: cartProvider),
                 ],
               ),
             ),
@@ -75,6 +63,72 @@ class CartScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key? key,
+    required this.cartProvider,
+  }) : super(key: key);
+
+  final CartProvider cartProvider;
+
+  @override
+  State<OrderButton> createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: (widget.cartProvider.totalAmount <= 0 || _isLoading)
+          ? null
+          : () async {
+              setState(() {
+                _isLoading = true;
+              });
+
+              try {
+                await Provider.of<OrdersProvider>(context, listen: false)
+                    .addOrder(
+                  widget.cartProvider.itemsByProductId.values.toList(),
+                  widget.cartProvider.totalAmount,
+                );
+
+                setState(() {
+                  _isLoading = false;
+                });
+                widget.cartProvider.clear();
+
+                if (!mounted) return;
+                Navigator.of(context).pushNamed(OrdersScreen.routeName);
+              } catch (ex) {
+                setState(() {
+                  _isLoading = false;
+                });
+
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Could not place order: ${ex.toString()}'),
+                  action: SnackBarAction(
+                      label: 'DISMISS',
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      }),
+                ));
+              }
+            },
+      style: TextButton.styleFrom(
+          foregroundColor: Theme.of(context).colorScheme.primary),
+      child: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : const Text('CHECKOUT'),
     );
   }
 }
