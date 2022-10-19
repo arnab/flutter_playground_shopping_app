@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_playground_shopping_app/models/providers/products_provider.dart';
 import 'package:flutter_playground_shopping_app/widgets/app_drawer.dart';
 import 'package:flutter_playground_shopping_app/widgets/manage_product_item.dart';
+import 'package:flutter_playground_shopping_app/widgets/screens/product_edit_screen.dart';
 import 'package:provider/provider.dart';
 
 class ManageProductsScreen extends StatelessWidget {
@@ -15,7 +16,9 @@ class ManageProductsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Products'),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.add))],
+        actions: [IconButton(onPressed: () {
+          Navigator.of(context).pushNamed(ProductEditScreen.routeName);
+        }, icon: const Icon(Icons.add))],
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),

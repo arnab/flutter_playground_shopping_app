@@ -21,17 +21,54 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
   Product _editedProduct = Product(
-    id: DateTime.now().toString(),
+    id: '',
     title: '',
     description: '',
     price: 0,
     imageUrl: '',
   );
+  var _initValues = {
+    'title': '',
+    'description': '',
+    'price': '',
+    // Note: Just add a default URL to avoid cumbersome copy-paste for now
+    'imageUrl': 'https://i.ebayimg.com/images/g/nqgAAOSwcJhfrYkp/s-l640.jpg',
+  };
+
+  var _isInit = true;
+  var _isLoading = false;
 
   @override
   void initState() {
     _imageUrlNodeFocus.addListener(_updateImageFromUrl);
     super.initState();
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final productId = ModalRoute
+          .of(context)
+          ?.settings
+          .arguments as String?;
+      if (productId != null) {
+        _editedProduct =
+            Provider.of<ProductsProvider>(context, listen: false).findById(
+                productId);
+        _initValues = {
+          'title': _editedProduct.title,
+          'description': _editedProduct.description,
+          'price': _editedProduct.price.toString(),
+          // 'imageUrl': _editedProduct.imageUrl,
+          'imageUrl': '',
+        };
+        _imageUrlController.text = _editedProduct.imageUrl;
+      }
+    }
+    _isInit = false;
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -43,7 +80,9 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
           IconButton(onPressed: _saveForm, icon: const Icon(Icons.save))
         ],
       ),
-      body: Padding(
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator(),)
+          : Padding(
         padding: const EdgeInsets.all(10),
         child: Form(
           key: _form,
@@ -51,6 +90,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
             child: Column(
               children: [
                 TextFormField(
+                  initialValue: _initValues['title'],
                   decoration: const InputDecoration(label: Text('Title')),
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) =>
@@ -66,13 +106,15 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                   },
                 ),
                 TextFormField(
+                  initialValue: _initValues['price'],
                   decoration: const InputDecoration(label: Text('Price')),
                   textInputAction: TextInputAction.next,
                   keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  const TextInputType.numberWithOptions(decimal: true),
                   focusNode: _priceNodeFocus,
-                  onFieldSubmitted: (_) => FocusScope.of(context)
-                      .requestFocus(_descriptionNodeFocus),
+                  onFieldSubmitted: (_) =>
+                      FocusScope.of(context)
+                          .requestFocus(_descriptionNodeFocus),
                   validator: (value) {
                     if ((value ?? '').isEmpty) {
                       return 'Please enter the price';
@@ -90,6 +132,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                   },
                 ),
                 TextFormField(
+                  initialValue: _initValues['description'],
                   decoration: const InputDecoration(label: Text('Description')),
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
@@ -111,14 +154,14 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                       child: _imageUrlController.text.isEmpty
                           ? const Text('Enter a URL')
                           : FittedBox(
-                              fit: BoxFit.cover,
-                              child: Image.network(_imageUrlController.text),
-                            ),
+                        fit: BoxFit.cover,
+                        child: Image.network(_imageUrlController.text),
+                      ),
                     ),
                     Expanded(
                       child: TextFormField(
                         decoration:
-                            const InputDecoration(label: Text('Image URL')),
+                        const InputDecoration(label: Text('Image URL')),
                         keyboardType: TextInputType.url,
                         textInputAction: TextInputAction.done,
                         controller: _imageUrlController,
@@ -165,14 +208,45 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     });
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final bool? isValid = _form.currentState?.validate();
     if (!(isValid ?? false)) {
       return;
     }
     _form.currentState?.save();
-    Provider.of<ProductsProvider>(context, listen: false)
-        .addProduct(_editedProduct);
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      if (_editedProduct.id.isEmpty) {
+        await Provider.of<ProductsProvider>(context, listen: false)
+            .addProduct(_editedProduct);
+      } else {
+        await Provider.of<ProductsProvider>(context, listen: false)
+            .updateProduct(_editedProduct.id, _editedProduct);
+      }
+    } catch (error) {
+      await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+        title: const Text('An error occurred!'),
+        content: Text('Details: $error'),
+        actions: [
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
+    );
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
     Navigator.of(context).pop();
   }
 }
