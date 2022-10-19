@@ -247,6 +247,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     setState(() {
       _isLoading = false;
     });
+
+    if (!mounted) return;
     Navigator.of(context).pop();
   }
 }
