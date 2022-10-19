@@ -7,7 +7,8 @@ import 'package:http/http.dart' as http;
 import '../product.dart';
 
 class ProductsProvider with ChangeNotifier {
-  static const _firebaseUrl = 'flutter-playground-7b38d-default-rtdb.firebaseio.com';
+  static const firebaseUrl =
+      'flutter-playground-7b38d-default-rtdb.firebaseio.com';
 
   List<Product> _products = [];
 
@@ -17,7 +18,7 @@ class ProductsProvider with ChangeNotifier {
       _products.where((p) => p.isFavorite).toList();
 
   Future<void> fetchAndSetProducts() async {
-    final url = Uri.https(_firebaseUrl, '/products.json');
+    final url = Uri.https(firebaseUrl, '/products.json');
     try {
       final response = await http.get(url);
       if (response.statusCode >= 300) {
@@ -39,6 +40,7 @@ class ProductsProvider with ChangeNotifier {
               description: e.value['description'],
               price: e.value['price'],
               imageUrl: e.value['imageUrl'],
+              isFavorite: e.value['isFavorite'],
             ),
           )
           .toList();
@@ -50,7 +52,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    final url = Uri.https(_firebaseUrl, '/products.json');
+    final url = Uri.https(firebaseUrl, '/products.json');
     try {
       final response = await http.post(
         url,
@@ -86,7 +88,7 @@ class ProductsProvider with ChangeNotifier {
   Future<void> updateProduct(String id, Product product) async {
     final productIndex = _products.indexWhere((p) => p.id == id);
     if (productIndex >= 0) {
-      final url = Uri.https(_firebaseUrl, '/products/$id.json');
+      final url = Uri.https(firebaseUrl, '/products/$id.json');
       final response = await http.patch(url,
           body: json.encode({
             'title': product.title,
